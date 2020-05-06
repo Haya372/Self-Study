@@ -15,9 +15,9 @@
 using namespace std;
 using namespace UpDown;
 
-GLuint width = 300, height = 400;
+GLuint width = 600, height = 600;
 
-Button Up(0, 0, 1, 1);
+Button Up(0.5, -3, 1.5, 1);
 PlayingCard updown;
 
 void disp() {
@@ -57,11 +57,27 @@ void mouse(int button, int state, int x, int y) {
 
 void reshape(int w, int h) {
 	glViewport(0, 0, w, h);
+	float x = (float)w / width;
+	float y = (float)h / height;
+	Up.reshape(x, y);
+	Up.scaling(x, y);
 	width = w;
 	height = h;
 	glutPostRedisplay();
 }
 
+void keyboard(unsigned char c, int x, int y) {
+	switch (c) {
+	case 27:
+		exit(0);
+		break;
+	case 'q':
+		exit(0);
+		break;
+	default:
+		break;
+	}
+}
 
 int main(int argc, char**argv) {
 	glutInit(&argc, argv);
@@ -74,6 +90,7 @@ int main(int argc, char**argv) {
 	glutReshapeFunc(reshape);
 	glutTimerFunc(100, timer, 0);
 	glutDisplayFunc(disp);
+	glutKeyboardFunc(keyboard);
 
 	init();
 	glutMainLoop();

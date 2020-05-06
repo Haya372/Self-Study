@@ -9,7 +9,8 @@ namespace UpDown {
 		void draw_Button();
 		void set_color(GLfloat r, GLfloat g, GLfloat b);
 		void Translate(GLfloat dx, GLfloat dy);
-		void scaling(GLfloat x);
+		void scaling(GLfloat x, GLfloat y);
+		void reshape(GLfloat x, GLfloat y);
 		bool on_Area(GLfloat mx, GLfloat my);
 	private:
 		GLfloat x, y, width, height;
