@@ -32,9 +32,15 @@ namespace UpDown {
 		y += dy;
 	}
 
-	void Button::scaling(GLfloat x) {
+	void Button::scaling(GLfloat x, GLfloat y) {
+		if (y < 0)y = x;
 		width *= x;
-		height *= x;
+		height *= y;
+	}
+
+	void Button::reshape(GLfloat x, GLfloat y) {
+		this->x *= x;
+		this->y *= y;
 	}
 
 	bool Button::on_Area(GLfloat mx, GLfloat my) {
