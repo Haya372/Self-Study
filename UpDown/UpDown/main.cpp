@@ -3,7 +3,7 @@
 #include<algorithm>
 #include<GL/glut.h>
 #include"PlayingCard.h"
-#include"object.h"
+#include"Button.h"
 
 #define UP 0
 #define DOWN 1
@@ -22,7 +22,7 @@ PlayingCard updown;
 
 void disp() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	Up.draw_Button();
+	Up.draw();
 	glLoadIdentity();
 	glOrtho(-(GLdouble)width / CORRECTION, (GLdouble)width / CORRECTION, -(GLdouble)height / CORRECTION, (GLdouble)height / CORRECTION, -1, 1);
 	glutSwapBuffers();
@@ -59,8 +59,8 @@ void reshape(int w, int h) {
 	glViewport(0, 0, w, h);
 	float x = (float)w / width;
 	float y = (float)h / height;
-	Up.reshape(x, y);
-	Up.scaling(x, y);
+	Up.NormalizePos(x, y);
+	Up.Scaling(x, y);
 	width = w;
 	height = h;
 	glutPostRedisplay();
