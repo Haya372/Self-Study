@@ -2,50 +2,20 @@
 
 namespace UpDown {
 
-	Button::Button(GLfloat px, GLfloat py, GLfloat w, GLfloat h) {
-		this->x = px;
-		this->y = py;
-		this->width = w;
-		this->height = h;
+	void Object::set_color(GLfloat r, GLfloat g, GLfloat b) {
+		color_[0] = r;
+		color_[1] = g;
+		color_[2] = b;
 	}
 
-	void Button::draw_Button() {
-		glPushMatrix();
-		glColor3fv(color);
-		glBegin(GL_QUADS);
-		glVertex2f(x, y);
-		glVertex2f(x + width, y);
-		glVertex2f(x + width, y + height);
-		glVertex2f(x, y + height);
-		glEnd();
-		glPopMatrix();
+	void Object::Translate(GLfloat dx, GLfloat dy) {
+		x_ += dx;
+		y_ += dy;
 	}
 
-	void Button::set_color(GLfloat r, GLfloat g, GLfloat b) {
-		this->color[0] = r;
-		this->color[1] = g;
-		this->color[2] = b;
+	void Object::NormalizePos(GLfloat x, GLfloat y) {
+		x_ *= x;
+		y_ *= y;
 	}
 
-	void Button::Translate(GLfloat dx, GLfloat dy) {
-		x += dx;
-		y += dy;
-	}
-
-	void Button::scaling(GLfloat x, GLfloat y) {
-		if (y < 0)y = x;
-		width *= x;
-		height *= y;
-	}
-
-	void Button::reshape(GLfloat x, GLfloat y) {
-		this->x *= x;
-		this->y *= y;
-	}
-
-	bool Button::on_Area(GLfloat mx, GLfloat my) {
-		if (mx<x || mx>x + width)return false;
-		if (my<y || my>y + height)return false;
-		return true;
-	}
 }
