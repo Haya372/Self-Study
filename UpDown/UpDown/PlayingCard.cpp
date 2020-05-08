@@ -1,6 +1,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include<random>
 #include"PlayingCard.h"
 
 #define UP 0
@@ -79,7 +80,9 @@ namespace UpDown {
 
 	void PlayingCard::ShuffleDeck() {
 
-		//shuffle(deck_.begin(), deck_.end(),0);
+		random_device seed_gen;
+		mt19937 engine(seed_gen());
+		shuffle(deck_.begin(), deck_.end(), engine);
 
 	}
 
