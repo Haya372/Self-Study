@@ -1,2 +1,5 @@
-﻿  PlayingCard.cpp
+﻿  Button.cpp
+  main.cpp
+c:\users\mh881\onedrive\デスクトップ\self-study\updown\updown\main.cpp(48): warning C4244: '引数': 'double' から 'GLfloat' への変換です。データが失われる可能性があります。
+  コードを生成中...
   UpDown.vcxproj -> C:\Users\mh881\OneDrive\デスクトップ\Self-Study\UpDown\Debug\UpDown.exe

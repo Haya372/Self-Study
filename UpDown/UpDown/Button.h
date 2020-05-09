@@ -2,15 +2,12 @@
 #include<iostream>
 #include<GL/glut.h>
 #include"object.h"
+#include"Rect.h"
 
 namespace UpDown {
-	class Button :public Object {
+	class Button :public Rect {
 	public:
 		Button(GLfloat px, GLfloat py, GLfloat w, GLfloat h);
-		void draw();
-		void Scaling(GLfloat x, GLfloat y);
 		bool on_Area(GLfloat mx, GLfloat my);
-	private:
-		GLfloat width_, height_;
 	};
 }
