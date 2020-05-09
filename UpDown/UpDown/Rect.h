@@ -1,4 +1,4 @@
-#pragma on
+#pragma once
 #include"object.h"
 #include<GL/glut.h>
 
