@@ -2,6 +2,7 @@
 #include<iostream>
 #include<vector>
 #include<algorithm>
+#include<GL/glut.h>
 
 #define UP 0
 #define DOWN 1
@@ -16,11 +17,17 @@ namespace UpDown {
 		void ShuffleDeck();
 		void Init();
 		void DrawCard(int predict);
+		void draw();
 	private:
 		pair<int, int>right_before_card_;
 		vector<int> deck_;
 		vector<int> used_card_;
 		pair<int, int>get(int num);
 		int Judge(pair<int, int>card);
+		void draw_circle(GLfloat x, GLfloat y, float r);
+		void draw_Spade();
+		void draw_Clover();
+		void draw_Heart();
+		void draw_Dia();
 	};
 }

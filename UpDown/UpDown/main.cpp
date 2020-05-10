@@ -56,6 +56,7 @@ void CreateFont(const wchar_t* _pFontName, int _Size)
 
 void disp() {
 	glClear(GL_COLOR_BUFFER_BIT);
+	updown.draw();
 	Up.draw();
 	Up.DrawString(g_hDC);
 	Down.draw();
@@ -106,6 +107,7 @@ void mouse(int button, int state, int x, int y) {
 			else if (Joker.on_Area(px, py)) {
 				updown.DrawCard(JOKER);
 			}
+			disp();
 		}
 		break;
 	default:
