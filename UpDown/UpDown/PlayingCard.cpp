@@ -5,6 +5,7 @@
 #include<algorithm>
 #include<random>
 #include<GL/glut.h>
+#include<wchar.h>
 #include"PlayingCard.h"
 
 
@@ -26,15 +27,22 @@ namespace UpDown {
 			deck_.push_back(i);
 		}
 
-		ShuffleDeck();
+		reverse(deck_.begin(),deck_.end());
+		before_is_joker_ = true;
+		//ShuffleDeck();
 
-		int num = deck_[0];
+		int num = deck_[0];		
+
+		/*while (true) {
+			if (get(num).first != JOKER)break;
+			ShuffleDeck();
+			num = deck_[0];
+		}
+		before_is_joker_ = false;*/
 		deck_.erase(deck_.begin());
-
-		used_card_.push_back(num);
+		used_card_.push_back(num);		
 
 		right_before_card_ = get(num);
-		cout << right_before_card_.second << endl;
 
 	}
 
@@ -51,38 +59,53 @@ namespace UpDown {
 
 		if (correct == JOKER || predict == JOKER) {
 			if (correct == predict) {
-				cout << "Everyone Out!!!" << endl;
+				//DrawString(L"Everyone Out!!!", g_hDC);
+				str_ = "OK!";
 			}
 			else {
-				cout << "JOKER MISS!!!" << endl;
+				//DrawString(L"JOKER MISS!!!", g_hDC);
+				str_ = "MISS";
 			}
 		}
 		else if (correct == STAY || predict == STAY) {
 			if (correct == predict) {
-				cout << "You can choose person who will receive punishment!!" << endl;
+				//DrawString(L"You can choose person who will receive punishment!!", g_hDC);
+				str_ = "OK!";
 			}
 			else {
-				cout << "STAY MISS!!" << endl;
+				//DrawString(L"STAY MISS!!", g_hDC);
+				str_ = "MISS";
 			}
 		}
 		else {
 			if (correct == predict) {
-				cout << "OK" << endl;
+				//DrawString(L"OK", g_hDC);
+				str_ = "OK!";
 			}
 			else {
-				cout << "MISS!" << endl;
+				//DrawString(L"MISS!", g_hDC);
+				str_ = "MISS";
 			}
 		}
 
 		//引いたカードがジョーカーでなければ前のカードを更新
 		if (correct != JOKER) {
+			before_is_joker_ = false;
 			right_before_card_ = drawn_card;
-			cout << right_before_card_.second << endl;
+		}
+		else {
+			before_is_joker_ = true;
 		}
 
 	}
 
 	void PlayingCard::draw() {
+
+		if (before_is_joker_) {
+			draw_Joker();
+			return;
+		}
+
 		if (right_before_card_.first == 0) {
 			//SPADE
 			draw_Spade();
@@ -99,9 +122,7 @@ namespace UpDown {
 			//DIAMOND
 			draw_Dia();
 		}
-		else if (right_before_card_.first == 4) {
-			//JOKER
-		}
+		draw_num();
 	}
 
 	void PlayingCard::ShuffleDeck() {
@@ -187,5 +208,198 @@ namespace UpDown {
 		glVertex2f(-1.5, -1);
 		glVertex2f(-2.4375, 0.5);
 		glEnd();
+	}
+
+	void PlayingCard::draw_Joker() {
+		glColor3f(0.8, 0, 0.8);
+		draw_circle(-1.5, 0.5, 1.5);
+	}
+
+	void PlayingCard::DrawString(GLfloat x, GLfloat y, HDC g_hDC) {
+		int list = 0;
+
+		if (str_.empty()) {
+			return;
+		}
+
+		//文字列変換(string => wchat_t)
+		wchar_t format[50];
+		size_t formatLen = 0;
+		mbstowcs_s(&formatLen, format, sizeof(str_), str_.c_str(), _TRUNCATE);
+
+		list = glGenLists(formatLen);
+
+		for (int i = 0; i < formatLen; i++) {
+			wglUseFontBitmapsW(g_hDC, format[i], 1, list + (DWORD)i);
+		}
+
+		glColor3f(0, 0, 0);
+		glRasterPos2f(x, y);
+		//ディスプレイリストで描画
+		for (int i = 0; i < formatLen; i++) {
+			glCallList(list + i);
+		}
+
+		//ディスプレイリスト破棄
+		glDeleteLists(list, formatLen);
+	}
+
+	void PlayingCard::draw_num() {
+		glColor3f(1, 1, 1);
+		glLineWidth(8);
+		if (right_before_card_.second == 1) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.5, 1);
+			glVertex2f(-1.5, 0);
+			glVertex2f(-1.5, 1);
+			glVertex2f(-1.6, 0.8);
+			glVertex2f(-1.65, 0);
+			glVertex2f(-1.35, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 2) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.75, 0);
+			glVertex2f(-1.75, 0);
+			glVertex2f(-1.25, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 3) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.75, 0);
+			glVertex2f(-1.25, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 4) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 5) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 0);
+			glVertex2f(-1.25, 0);
+			glVertex2f(-1.75, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 6) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 0.5);
+			glEnd();
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 0);
+			glVertex2f(-1.75, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 7) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 8) {
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0);
+			glVertex2f(-1.75, 0);
+			glEnd();
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 0.5);
+			glVertex2f(-1.25, 0.5);
+			glEnd();
+		}
+		else if (right_before_card_.second == 9) {
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.75, 0.5);
+			glEnd();
+			glBegin(GL_LINES);
+			glVertex2f(-1.25, 0.5);
+			glVertex2f(-1.25, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 10) {
+			glBegin(GL_LINE_LOOP);
+			glVertex2f(-1.5, 1);
+			glVertex2f(-1, 1);
+			glVertex2f(-1, 0);
+			glVertex2f(-1.5, 0);
+			glEnd();
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 11) {
+			//ちょっと汚い
+			glBegin(GL_LINES);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.25, 0.25);
+			glEnd();
+			glBegin(GL_LINES);
+			GLfloat x = -1.5, y = 0.25;
+			for (float i = 0.05; i < 1; i += 0.05) {
+				glVertex2f(x + 0.25*cos((i - 0.05)*M_PI), y - 0.25*sin((i - 0.05)*M_PI));
+				glVertex2f(x + 0.25*cos(i*M_PI), y - 0.25*sin(i*M_PI));
+			}
+			glEnd();
+		}
+		else if (right_before_card_.second == 12) {
+			GLfloat x = -1.5, y = 0.5;
+			glBegin(GL_LINE_LOOP);
+			for (float i = 0; i < 2 * M_PI; i += 0.01) {
+				glVertex2f(x + 0.25*cos(i), y + 0.5*sin(i));
+			}
+			glEnd();
+			glBegin(GL_LINES);
+			glVertex2f(-1.4, 0.2);
+			glVertex2f(-1.1, 0);
+			glEnd();
+		}
+		else if (right_before_card_.second == 13) {
+			glBegin(GL_LINES);
+			glVertex2f(-1.75, 1);
+			glVertex2f(-1.75, 0);
+			glVertex2f(-1.25, 1);
+			glVertex2f(-1.75, 0.45);
+			glVertex2f(-1.65, 0.5);
+			glVertex2f(-1.25, 0);
+			glEnd();
+			}
 	}
 }

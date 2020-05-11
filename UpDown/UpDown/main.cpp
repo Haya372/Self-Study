@@ -25,6 +25,8 @@ Button Down(1, -1.73, 2.5, 1.55);
 Button Stay(1, 0.18, 2.5, 1.55);
 Button Joker(1, -3.64, 2.5, 1.55);
 
+Button ReturnTo(-1.4, -3, 1.6, 1);
+
 PlayingCard updown;
 
 HFONT g_hFont;
@@ -57,6 +59,7 @@ void CreateFont(const wchar_t* _pFontName, int _Size)
 void disp() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	updown.draw();
+	updown.DrawString(-2.3, 3, g_hDC);
 	Up.draw();
 	Up.DrawString(g_hDC);
 	Down.draw();
@@ -65,6 +68,8 @@ void disp() {
 	Stay.DrawString(g_hDC);
 	Joker.draw();
 	Joker.DrawString(g_hDC);
+	ReturnTo.draw();
+	ReturnTo.DrawString(g_hDC);
 	glLoadIdentity();
 	glOrtho(-(GLdouble)width / CORRECTION, (GLdouble)width / CORRECTION, -(GLdouble)height / CORRECTION, (GLdouble)height / CORRECTION, -1, 1);
 	glutSwapBuffers();
@@ -80,6 +85,8 @@ void init() {
 	Stay.set_Str("STAY", 0, 0, 0);
 	Joker.set_color(0.8, 0.8, 0.2);
 	Joker.set_Str("JOKER", 0, 0, 0);
+	ReturnTo.set_color(0.5, 0.5, 0.5);
+	ReturnTo.set_Str("Return", 0, 0, 0);
 	updown.Init();
 	CreateFont(MY_FONT, 32);
 }
@@ -107,7 +114,7 @@ void mouse(int button, int state, int x, int y) {
 			else if (Joker.on_Area(px, py)) {
 				updown.DrawCard(JOKER);
 			}
-			disp();
+			//disp();
 		}
 		break;
 	default:
