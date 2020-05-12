@@ -20,6 +20,8 @@ namespace UpDown {
 		void DrawCard(int predict);
 		void draw();
 		void DrawString(GLfloat x, GLfloat y, HDC g_hDC);
+		void ReturnJoker();
+		void DrawRemainedDecks(HDC g_hDC);
 	private:
 		pair<int, int>right_before_card_;
 		vector<int> deck_;
